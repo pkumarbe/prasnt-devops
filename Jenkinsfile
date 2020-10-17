@@ -22,7 +22,7 @@ pipeline {
                 sh 'pwd'
                 sh 'ls'
                 sh 'docker build -t my-scm-web:0.0.${BUILD_NUMBER} .'
-		sh 'docker tag  my-scm-web:0.0.${BUILD_NUMBER} docker.io/pkumarbe/my-scm-web:0.0.${BUILD_NUMBER}'
+		sh 'docker tag  my-scm-web:0.0.${BUILD_NUMBER} docker.io/pk1dockerhub/my-scm-web:0.0.${BUILD_NUMBER}'
                 sh 'docker push docker.io/pk1dockerhub/my-scm-web:0.0.${BUILD_NUMBER}'
              }
             }
