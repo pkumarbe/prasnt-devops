@@ -1,5 +1,6 @@
 pipeline {
     agent { label 'node1' }
+    // set variables	
     environment {
         command_to_execute = "docker run --name my-devops-custom-web -d -p 8001:8001 my-scm-web:0.0.${BUILD_NUMBER}"
        }
@@ -10,7 +11,7 @@ pipeline {
                 echo 'Hello World'
             }
         }
-        stage('print env') {
+        stage('some unit test') {
             steps {
                 sh 'env'
                 sh 'whoami'
@@ -18,19 +19,17 @@ pipeline {
                 sh 'sudo docker ps -a'
             }
         }
-        stage('docker log in') {
+        stage('docker build and push to docker hub if sucess') {
             steps {
                 withCredentials([string(credentialsId:'pdcokerhub', variable: 'mydockerhub')]) {
                 sh 'docker login -u pk1dockerhub -p ${mydockerhub}'
-                sh 'pwd'
-                sh 'ls'
                 sh 'docker build -t my-scm-web:0.0.${BUILD_NUMBER} .'
 	        sh 'docker tag  my-scm-web:0.0.${BUILD_NUMBER} docker.io/pk1dockerhub/my-scm-web:0.0.${BUILD_NUMBER}'
                 sh 'docker push docker.io/pk1dockerhub/my-scm-web:0.0.${BUILD_NUMBER}'
              }
             }
         }
-        stage('deploy to dev'){
+        stage('deploy app dev remote server'){
             
             steps{
                  sshagent(['rootn1']) {
