@@ -1,7 +1,7 @@
 pipeline {
     agent { label 'node1' }
     environment {
-        command_to_execute = "docker run --name my-devops-custom-web -d my-scm-web:0.0.${BUILD_NUMBER}"
+        command_to_execute = "docker run --name my-devops-custom-web -d -p 8001:8001 my-scm-web:0.0.${BUILD_NUMBER}"
        }
 
     stages {
