@@ -1,5 +1,8 @@
 pipeline {
     agent { label 'node1' }
+    environment {
+        command_to_execute = "docker run --name my-devops-custom-web -d my-scm-web:0.0.${BUILD_NUMBER}"
+       }
 
     stages {
         stage('Hello') {
@@ -22,7 +25,7 @@ pipeline {
                 sh 'pwd'
                 sh 'ls'
                 sh 'docker build -t my-scm-web:0.0.${BUILD_NUMBER} .'
-		sh 'docker tag  my-scm-web:0.0.${BUILD_NUMBER} docker.io/pk1dockerhub/my-scm-web:0.0.${BUILD_NUMBER}'
+	        	sh 'docker tag  my-scm-web:0.0.${BUILD_NUMBER} docker.io/pk1dockerhub/my-scm-web:0.0.${BUILD_NUMBER}'
                 sh 'docker push docker.io/pk1dockerhub/my-scm-web:0.0.${BUILD_NUMBER}'
              }
             }
@@ -30,9 +33,9 @@ pipeline {
         stage('deploy to dev'){
             
             steps{
-                 sshagent(['bbf5141d-4b0e-47f6-a17a-e0a37d1ec957']) {
-                    // def command_to_execute="docker run --name my-devops-custom-web -d my-scm-web:0.0.${BUILD_NUMBER}"
-                    sh "echo ${command_to_execute}"
+                 sshagent(['rootn1']) {
+                    sh 'echo  "${command_to_execute}"' 
+                    sh 'ssh -o StrictHostKeyChecking=no root@34.123.165.202 ${command_to_execute}'
                  }
          
             }
